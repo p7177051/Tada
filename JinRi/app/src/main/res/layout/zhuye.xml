@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/zhuye"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<FrameLayout
+    android:id="@+id/zhouye_framelayout"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    >
+
+</FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+    <RadioGroup
+        android:id="@+id/zhouye_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+        android:id="@+id/zhuye_shouye"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/select1"
+        android:layout_height="match_parent"
+        android:textColor="@drawable/ziselect"
+        android:button="@null"
+        android:gravity="center"
+        android:text="首页"/>
+        <RadioButton
+            android:id="@+id/zhuye_yangguang"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/select2"
+            android:layout_height="match_parent"
+            android:textColor="@drawable/ziselect"
+            android:button="@null"
+            android:gravity="center"
+            android:text="阳光宽屏"/>
+        <RadioButton
+            android:id="@+id/zhuye_guanzhu"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/select3"
+            android:layout_height="match_parent"
+            android:textColor="@drawable/ziselect"
+            android:button="@null"
+            android:gravity="center"
+            android:text="关注"/>
+        />
+    </RadioGroup>
+</LinearLayout>
