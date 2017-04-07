@@ -9,6 +9,7 @@
         android:layout_height="50dp"
         android:background="#CC3131"
         android:orientation="horizontal"
+        android:id="@+id/ll"
         >
         <ToggleButton
             android:id="@+id/shouye_togbutton"
@@ -33,17 +34,31 @@
     </LinearLayout>
 
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <android.support.design.widget.TabLayout
+        android:id="@+id/shouye_tabs"
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/shouye_tabs"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="50dp"
+        app:tabSelectedTextColor="#CC3131"
+        app:tabTextColor="@android:color/background_dark"
+        app:tabMode="scrollable"
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabSelectedTextColor="#CC3131"
-                app:tabTextColor="@android:color/background_dark"
-                app:tabMode="scrollable"
+        ></android.support.design.widget.TabLayout>
+    <ImageView
+        android:id="@+id/shouye_pindaobutton"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
 
-                ></android.support.design.widget.TabLayout>
+        android:src="@mipmap/addicon_repost_normal"
+
+        />
+</LinearLayout>
+
             <android.support.v4.view.ViewPager
                 android:id="@+id/shouye_viewpager"
                 android:layout_width="match_parent"

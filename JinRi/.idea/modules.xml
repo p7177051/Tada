@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/JinRi.iml" filepath="$PROJECT_DIR$/JinRi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/channellib/channellib.iml" filepath="$PROJECT_DIR$/channellib/channellib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/magicindicator/magicindicator.iml" filepath="$PROJECT_DIR$/magicindicator/magicindicator.iml" />
       <module fileurl="file://$PROJECT_DIR$/slidingmenu_library/slidingmenu_library.iml" filepath="$PROJECT_DIR$/slidingmenu_library/slidingmenu_library.iml" />
       <module fileurl="file://$PROJECT_DIR$/xlistviewlibrary/xlistviewlibrary.iml" filepath="$PROJECT_DIR$/xlistviewlibrary/xlistviewlibrary.iml" />
     </modules>

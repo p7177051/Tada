@@ -1,6 +1,6 @@
 package lyp.bawei.com.jinri.Activity;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -43,7 +43,7 @@ public class Xiangqing extends SwipeBackActivity{
         settings.setJavaScriptEnabled(true);
         xiangqing_webview.setWebViewClient(new WebViewClient());
 
-            xiangqing_webview.loadUrl(url);
+        xiangqing_webview.loadUrl(url);
 
 
 

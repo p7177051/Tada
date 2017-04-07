@@ -27,6 +27,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.trs.channellib.channel.channel.helper.ChannelDataHelepr;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -36,17 +37,20 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import cn.smssdk.gui.RegisterPage;
-import lyp.bawei.com.jinri.Activity.MainActivity;
+import lyp.bawei.com.jinri.Activity.PindaoActivity;
 import lyp.bawei.com.jinri.Activity.XiazaiActivity;
+import lyp.bawei.com.jinri.Bean.PindaoBean;
 import lyp.bawei.com.jinri.Myadapter.Shouyeviewpager;
 import lyp.bawei.com.jinri.R;
 import lyp.bawei.com.jinri.SHouyeFragment.JiankanFragment;
+import lyp.bawei.com.jinri.SHouyeFragment.Qutu_fragment;
 import lyp.bawei.com.jinri.SHouyeFragment.RedianShouyueFragment;
 import lyp.bawei.com.jinri.SHouyeFragment.ShehuiFragment;
 import lyp.bawei.com.jinri.SHouyeFragment.TuijianFragment;
@@ -55,20 +59,19 @@ import lyp.bawei.com.jinri.SHouyeFragment.YuleShouyeFragment;
 import lyp.bawei.com.jinri.SHouyeFragment.ZhengFragment;
 import lyp.bawei.com.jinri.Utiles.NetWorkUtils;
 import lyp.bawei.com.jinri.Utiles.ThemeManager;
-import xlistview.bawei.com.xlistviewlibrary.XListView;
 
 /**
  * Created by Administrator on 2017/3/10.
  */
 
-public class Shouye extends Fragment implements View.OnClickListener,ThemeManager.OnThemeChangeListener{
+public class Shouye extends Fragment implements View.OnClickListener,ThemeManager.OnThemeChangeListener,ChannelDataHelepr.ChannelDataRefreshListenter{
 
 
     private TabLayout shouye_tabs;
     private ViewPager shouye_viewpager;
     private View view;
     private ToggleButton shouye_togbutton;
-
+    ChannelDataHelepr<PindaoBean> dataHelepr;
     private SlidingMenu slidingMenu;
 private String[] tabarr=new String[]{"推荐","热点","社会","娱乐","健康","正能量","图片","趣图"};
     private ImageView denglu_qq;
@@ -84,6 +87,11 @@ private String[] tabarr=new String[]{"推荐","热点","社会","娱乐","健康
     private SharedPreferences.Editor editor;
     private Button denglu_lixianhuancun;
     private AlertDialog.Builder builder;
+    private ImageView shouye_pindaobutton;
+int needShowPosition=-1;
+    private ArrayList<PindaoBean> pindaplist;
+    private ArrayList<PindaoBean> mypindaolist;
+    private Shouyeviewpager shouyeviewpager;
 
     @Nullable
     @Override
@@ -106,15 +114,20 @@ private String[] tabarr=new String[]{"推荐","热点","社会","娱乐","健康
 
     }
     public void init(){
+
         shouye_tabs = (TabLayout) view.findViewById(R.id.shouye_tabs);
         shouye_viewpager = (ViewPager) view.findViewById(R.id.shouye_viewpager);
         shouye_togbutton = (ToggleButton) view.findViewById(R.id.shouye_togbutton);
+        shouye_pindaobutton = (ImageView) view.findViewById(R.id.shouye_pindaobutton);
+        shouye_pindaobutton.setOnClickListener(this);
         shouye_togbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 slidingMenu.toggle();
             }
         });
+
+
     }
     public void cehua(){
         slidingMenu = new SlidingMenu(getActivity());
@@ -151,6 +164,10 @@ private String[] tabarr=new String[]{"推荐","热点","社会","娱乐","健康
         denglu_lixianhuancun.setOnClickListener(this);
     }
     public void gettab(){
+
+        dataHelepr = new ChannelDataHelepr(getContext(), this,view.findViewById(R.id.shouye_pindaobutton) );
+        pindaplist = new ArrayList<PindaoBean>();
+        mypindaolist = new ArrayList<PindaoBean>();
         ArrayList<Fragment> flist=new ArrayList<Fragment>();
         TuijianFragment tuijianFragment=new TuijianFragment();
         flist.add(tuijianFragment);
@@ -166,16 +183,31 @@ private String[] tabarr=new String[]{"推荐","热点","社会","娱乐","健康
         flist.add(zhengFragment);
         TupianFragment tupianFragment=new TupianFragment();
         flist.add(tupianFragment);
+        Qutu_fragment shouye_fragment=new Qutu_fragment();
+        flist.add(shouye_fragment);
 
-    Shouye_fragment shouye_fragment=new Shouye_fragment();
-    flist.add(shouye_fragment);
+        PindaoBean pindaoBean1=new PindaoBean("推荐",0,1,1,tuijianFragment);
+        PindaoBean pindaoBean2=new PindaoBean("热点",0,1,1,redianShouyueFragment);
+        PindaoBean pindaoBean3=new PindaoBean("社会",1,0,1,shehuiFragment);
+        PindaoBean pindaoBean4=new PindaoBean("娱乐",1,0,1,yuleShouyeFragment);
+        PindaoBean pindaoBean5=new PindaoBean("健康",1,0,1,jiankanFragment);
+        PindaoBean pindaoBean6=new PindaoBean("正能量",1,0,1,zhengFragment);
+        PindaoBean pindaoBean7=new PindaoBean("图片",1,0,1,tupianFragment);
+        PindaoBean pindaoBean8=new PindaoBean("趣图",1,0,1,shouye_fragment);
+        pindaplist.add(pindaoBean1);
+        pindaplist.add(pindaoBean2);
+        pindaplist.add(pindaoBean3);
+        pindaplist.add(pindaoBean4);
+        pindaplist.add(pindaoBean5);
+        pindaplist.add(pindaoBean6);
+        pindaplist.add(pindaoBean7);
+        pindaplist.add(pindaoBean8);
+        dataHelepr.setSwitchView(shouye_pindaobutton);
 
-
-        Shouyeviewpager shouyeviewpager=new Shouyeviewpager(getChildFragmentManager(),flist,tabarr);
-        shouye_viewpager.setAdapter(shouyeviewpager);
+        shouyeviewpager = new Shouyeviewpager(getChildFragmentManager(),mypindaolist);
         shouye_viewpager.setAdapter(shouyeviewpager);
         shouye_tabs.setupWithViewPager(shouye_viewpager);
-        shouye_tabs.setTabsFromPagerAdapter(shouyeviewpager);
+        loadData();
     }
 
     @Override
@@ -226,6 +258,10 @@ private String[] tabarr=new String[]{"推荐","热点","社会","娱乐","健康
             case R.id.denglu_lixianhuancun:
                 xiazai();
                 break;
+            /*case R.id.shouye_pindaobutton:
+                Intent intent=new Intent(getActivity(),PindaoActivity.class);
+                startActivity(intent);
+                break;*/
         }
     }
     private UMAuthListener umAuthListener = new UMAuthListener() {
@@ -334,5 +370,55 @@ private String[] tabarr=new String[]{"推荐","热点","社会","娱乐","健康
 
     }
 
+    @Override
+    public void updateData() {
+        loadData();
+    }
+    //实现的方法  点击频道中的item的时候触发  可以根据是否有更新进行选择  viewpager切换的时机
+    @Override
+    public void onChannelSeleted(boolean update,final int posisiton) {
+        if(!update) {
+            //如果没有更新  那么viewpager显示的是posisiton位置的数据
+            shouye_viewpager.setCurrentItem(posisiton);
+        }else {
+            //如果更新数据了  那么默认显示的位置为posisiton，用needShowPosition接出来
+            needShowPosition=posisiton;
+        }
 
+    }
+
+    //每次数据加载完成后，过滤一遍，只显示订阅的频道
+    private void loadData() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                // String data = getFromRaw();
+                //解析得到数据
+                //  List<MyChannel> alldata = GsonUtil.jsonToBeanList(data, MyChannel.class);
+                //Library中已经封装了数据库操作，获取需要显示的数据只需要一行代码即可
+                //过滤数据  如果有新的频道会自动订阅并保存到数据库中  从数据库中得到数据
+                final List<PindaoBean> showChannels = dataHelepr.getShowChannels(pindaplist);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //清空频道集合
+                        mypindaolist.clear();
+                        //添加从数据库中查询到的最新的集合数据
+                        mypindaolist.addAll(showChannels);
+                        //适配器刷新
+                        shouyeviewpager.notifyDataSetChanged();
+                        //needShowPosition需要显示的默认位置-1
+                        if(needShowPosition!=-1){
+                            //如果不等于-1  viewpager显示当前位置
+                            shouye_viewpager.setCurrentItem(needShowPosition);
+                            //显示完之后重新等于默认值，等待下一次被赋值
+                            needShowPosition=-1;
+                        }
+                    }
+                });
+
+            }
+        }).start();
+    }
 }

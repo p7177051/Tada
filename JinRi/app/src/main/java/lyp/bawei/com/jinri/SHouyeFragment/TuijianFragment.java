@@ -55,13 +55,13 @@ public class TuijianFragment extends Fragment{
             @Override
             public void onSuccess(String result) {
                 Gson gson=new Gson();
-                STuijian sTuijian = gson.fromJson(result, STuijian.class);
-                List<STuijian.DataBean> data = sTuijian.getData();
-                ArrayList<ItemBean> list=new ArrayList<ItemBean>();
-for (int i=0;i<data.size();i++){
-    String content = data.get(i).getContent();
-    ItemBean itemBean = gson.fromJson(content, ItemBean.class);
-    list.add(itemBean);
+    STuijian sTuijian = gson.fromJson(result, STuijian.class);
+    List<STuijian.DataBean> data = sTuijian.getData();
+    ArrayList<ItemBean> list=new ArrayList<ItemBean>();
+    for (int i=0;i<data.size();i++){
+        String content = data.get(i).getContent();
+        ItemBean itemBean = gson.fromJson(content, ItemBean.class);
+        list.add(itemBean);
 }
                 ShouyelistAdapter shouyelistAdapter=new ShouyelistAdapter(getActivity(),list);
                 shouye_fragment_xlist.setAdapter(shouyelistAdapter);

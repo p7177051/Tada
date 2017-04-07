@@ -1,6 +1,8 @@
 package lyp.bawei.com.jinri.Fragment;
 
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -10,9 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ClipPagerTitleView;
+
 import java.util.ArrayList;
 
 import lyp.bawei.com.jinri.Myadapter.Shouyeviewpager;
+import lyp.bawei.com.jinri.Myadapter.Yangguangpageradapter;
 import lyp.bawei.com.jinri.R;
 import lyp.bawei.com.jinri.YangguangFragment.GaoxiaoFragment;
 import lyp.bawei.com.jinri.YangguangFragment.JingpinFragment;
@@ -26,9 +36,11 @@ import lyp.bawei.com.jinri.YangguangFragment.YuleFragment;
 public class Yangguang extends Fragment{
 
     private View view;
-    private TabLayout yangguang_tablayout;
+
     private ViewPager yangguang_viewpager;
 private String[] arr=new String[]{"热点","娱乐","搞笑","精品"};
+    private MagicIndicator magicIndicator;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,8 +51,63 @@ private String[] arr=new String[]{"热点","娱乐","搞笑","精品"};
 
     }
     public void init(){
-        yangguang_tablayout = (TabLayout) view.findViewById(R.id.yangguang_tablayout);
+        magicIndicator = (MagicIndicator) view.findViewById(R.id.yangguang_tablayout);
+
         yangguang_viewpager = (ViewPager) view.findViewById(R.id.yangguang_viewpager);
+        final CommonNavigator commonNavigator = new CommonNavigator(getContext());
+        commonNavigator.setAdapter(new CommonNavigatorAdapter() {
+
+            @Override
+            public int getCount() {
+                return arr == null ? 0 : arr.length;
+            }
+
+            @Override
+            public IPagerTitleView getTitleView(Context context, final int index) {
+                ClipPagerTitleView clipPagerTitleView = new ClipPagerTitleView(context);
+
+                clipPagerTitleView.setText(arr[index]);
+                clipPagerTitleView.setTextColor(Color.BLACK);
+                clipPagerTitleView.setClipColor(Color.RED);
+                clipPagerTitleView.setTextSize(30);
+
+                clipPagerTitleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        yangguang_viewpager.setCurrentItem(index);
+                    }
+                });
+
+                return clipPagerTitleView;
+            }
+
+
+
+            @Override
+            public IPagerIndicator getIndicator(Context context) {
+                return null;    // 没有指示器，因为title的指示作用已经很明显了
+            }
+        });
+        magicIndicator.setNavigator(commonNavigator);
+        yangguang_viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                magicIndicator.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                magicIndicator.onPageSelected(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                magicIndicator.onPageScrollStateChanged(state);
+            }
+        });
+
+        yangguang_viewpager.setCurrentItem(1);
     }
    public void guanlian(){
        ArrayList<Fragment> list=new ArrayList<Fragment>();
@@ -53,10 +120,10 @@ private String[] arr=new String[]{"热点","娱乐","搞笑","精品"};
        list.add(gaoxiaoFragment);
        JingpinFragment jingpinFragment=new JingpinFragment();
        list.add(jingpinFragment);
-       Shouyeviewpager shouyeviewpager=new Shouyeviewpager(getChildFragmentManager(),list,arr);
-       yangguang_viewpager.setAdapter(shouyeviewpager);
-       yangguang_viewpager.setAdapter(shouyeviewpager);
-       yangguang_tablayout.setupWithViewPager(yangguang_viewpager);
-       yangguang_tablayout.setTabsFromPagerAdapter(shouyeviewpager);
+
+       Yangguangpageradapter yangguangpageradapter=new Yangguangpageradapter(getChildFragmentManager(),list);
+       yangguang_viewpager.setAdapter(yangguangpageradapter);
+
+
    }
 }

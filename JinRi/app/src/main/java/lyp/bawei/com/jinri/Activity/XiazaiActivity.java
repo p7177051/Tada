@@ -24,15 +24,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jiguang.net.HttpUtils;
 import lyp.bawei.com.jinri.Bean.Xiazai;
 import lyp.bawei.com.jinri.Myadapter.XiazaiAdapter;
 import lyp.bawei.com.jinri.R;
+
+import static android.R.attr.path;
 
 /**
  * Created by Administrator on 2017/3/17.
  */
 
 public class XiazaiActivity extends Activity{
+
 
     private ListView xiazai_listview;
     private Button xiazai_xiazaibutton;
